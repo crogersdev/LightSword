@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/stars_bg">
+
+    <!-- TODO: move the sword down a bit, also make a new layout for Darth Maul -->
+
+    <ImageButton
+        android:id="@+id/btn_sword_toggle"
+        android:src="@drawable/hilt2_med"
+        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <ImageButton
+        android:id="@+id/btn_blade"
+        android:src="@drawable/blue_blade_med"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="-5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_above="@+id/btn_sword_toggle"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

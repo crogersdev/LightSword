@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:paddingTop="2dp">
+
+    <ImageButton
+        android:id="@+id/redBladeDialog"
+        android:src="@drawable/red_blade_dialog"
+        android:background="@android:color/transparent"
+        android:layout_marginRight="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <ImageButton
+        android:id="@+id/greenBladeDialog"
+        android:src="@drawable/green_blade_dialog"
+        android:background="@android:color/transparent"
+        android:layout_marginRight="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/redBladeDialog"/>
+    <ImageButton
+        android:id="@+id/blueBladeDialog"
+        android:src="@drawable/blue_blade_dialog"
+        android:background="@android:color/transparent"
+        android:layout_marginRight="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/greenBladeDialog"/>
+    <ImageButton
+        android:id="@+id/purpleBladeDialog"
+        android:src="@drawable/purple_blade_dialog"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/blueBladeDialog"/>
+
+    <!--
+    <View
+        android:layout_width="250dp"
+        android:layout_height="1dp"
+        android:background="#FF0000"
+        android:layout_marginTop="10dp"
+        android:layout_marginBototm="2dp"
+
+        />
+        -->
+
+    <ImageButton
+        android:id="@+id/hilt1Dialog"
+        android:src="@drawable/hilt1_med"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/redBladeDialog" />
+
+    <ImageButton
+        android:id="@+id/hilt2Dialog"
+        android:src="@drawable/hilt2_med"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/hilt1Dialog"
+        android:layout_alignBottom="@id/hilt1Dialog"/>
+
+    <ImageButton
+        android:id="@+id/hilt3Dialog"
+        android:src="@drawable/hilt3_med"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/hilt2Dialog"
+        android:layout_alignBottom="@id/hilt2Dialog"/>
+
+</RelativeLayout>
