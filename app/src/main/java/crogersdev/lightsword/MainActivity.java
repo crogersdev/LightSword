@@ -1,6 +1,8 @@
 package crogersdev.lightsword;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,7 +11,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -35,10 +37,10 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     boolean m_xyzInitialized;
 
     /* Listeners */
-    private View.OnClickListener m_btnListener;
+    private View.OnClickListener m_viewListener;
 
     /* Buttons and Views */
-    private ImageButton m_btnSwordToggle;
+    private ImageButton m_hilt;
     private ImageButton m_bladeBtn;
 
     /* Sounds */
@@ -57,37 +59,92 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     /* the Light Sword State class object */
     LightSwordState m_swordState;
 
+    /* Customize Dialog Stuff */
+    AlertDialog customizeSwordDlg;
+    //SwordOptionsDialog customizeSwordDlg;
+
+    private View swordOptionsView;
+    private ImageButton m_dlgHilt1;
+    private ImageButton m_dlgHilt2;
+    private ImageButton m_dlgHilt3;
+    private ImageButton m_dlgColorBlue;
+    private ImageButton m_dlgColorGreen;
+    private ImageButton m_dlgColorRed;
+    private ImageButton m_dlgColorPurple;
+
     /* Animation */
     Animation m_animSwordOn;
 
     protected void onInflateObjects() {
-        m_btnSwordToggle = (ImageButton) findViewById(R.id.btn_sword_toggle);
-        m_bladeBtn       = (ImageButton) findViewById(R.id.btn_blade);
+        m_hilt     = (ImageButton) findViewById(R.id.btn_hilt);
+        m_bladeBtn = (ImageButton) findViewById(R.id.btn_blade);
+
+        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+        swordOptionsView = inflater.inflate(R.layout.sword_options, null);
+
+        m_dlgHilt1       = (ImageButton) swordOptionsView.findViewById(R.id.hilt1Dialog);
+        m_dlgHilt2       = (ImageButton) swordOptionsView.findViewById(R.id.hilt2Dialog);
+        m_dlgHilt3       = (ImageButton) swordOptionsView.findViewById(R.id.hilt3Dialog);
+        m_dlgColorBlue   = (ImageButton) swordOptionsView.findViewById(R.id.blueBladeDialog);
+        m_dlgColorGreen  = (ImageButton) swordOptionsView.findViewById(R.id.greenBladeDialog);
+        m_dlgColorRed    = (ImageButton) swordOptionsView.findViewById(R.id.redBladeDialog);
+        m_dlgColorPurple = (ImageButton) swordOptionsView.findViewById(R.id.purpleBladeDialog);
 
         // SoundPool ctor: int maxStreams, int streamType, int srcQuality
         m_soundPool = new SoundPool(12, 3, 0);
     }
 
     protected void onCreateListeners() {
-        m_btnListener = new View.OnClickListener() {
+        m_viewListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             int btnId = view.getId();
             switch (btnId) {
-                case R.id.btn_sword_toggle:
+                case R.id.btn_hilt:
                     toggleSword();
                     break;
                 case R.id.btn_blade:
                     showBladeColorDialog();
                     break;
+                case R.id.purpleBladeDialog:
+
+                    m_swordState.m_color = LightSwordState.bladeColor_e.PURPLE;
+                    m_bladeBtn.setImageResource(R.drawable.purple_blade_med);
+                    break;
+                case R.id.redBladeDialog:
+
+                    m_swordState.m_color = LightSwordState.bladeColor_e.RED;
+                    m_bladeBtn.setImageResource(R.drawable.red_blade_med);
+                    break;
+                case R.id.greenBladeDialog:
+
+                    m_swordState.m_color = LightSwordState.bladeColor_e.GREEN;
+                    m_bladeBtn.setImageResource(R.drawable.green_blade_med);
+                    break;
+                case R.id.blueBladeDialog:
+
+                    m_swordState.m_color = LightSwordState.bladeColor_e.BLUE;
+                    m_bladeBtn.setImageResource(R.drawable.blue_blade_med);
+                    break;
+                case R.id.hilt1Dialog:
+                    
+                    m_swordState.m_hilt = 1;
             } // end switch
         } // end onClick
         }; // end m_btnListener = onClickListener ...
     }
 
     protected void onSetListeners() {
-        m_btnSwordToggle.setOnClickListener(m_btnListener);
-        m_bladeBtn.setOnClickListener(m_btnListener);
+        //todo: this is ugly ugly ugly.  please replace with something cleaner.  does the onclick from xml work?
+        m_hilt.setOnClickListener(m_viewListener);
+        m_bladeBtn.setOnClickListener(m_viewListener);
+        m_dlgHilt1.setOnClickListener(m_viewListener);
+        m_dlgHilt2.setOnClickListener(m_viewListener);;
+        m_dlgHilt3.setOnClickListener(m_viewListener);;
+        m_dlgColorBlue.setOnClickListener(m_viewListener);;
+        m_dlgColorGreen.setOnClickListener(m_viewListener);;
+        m_dlgColorRed.setOnClickListener(m_viewListener);;
+        m_dlgColorPurple.setOnClickListener(m_viewListener);;
     }
 
     @Override
@@ -139,6 +196,17 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
         // Animation loads
         m_animSwordOn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sword_on_anim);
+
+        customizeSwordDlg = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Customize your Light Sword")
+                .setView(swordOptionsView)
+            .setPositiveButton(R.string.dlgConfirm, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    Toast.makeText(MainActivity.this, "dialog clicked", Toast.LENGTH_SHORT).show();
+                    //todo: update light sword properties and re-draw
+                }
+            })
+            .setNegativeButton(R.string.dlgCancel, null).create();
     }
 
     @Override
@@ -205,9 +273,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 // TODO: randomize the swing sound so it doesn't sound exactly the same each time
                 if (!m_swooshSound) {
                     m_swooshSound = true;
-
-                    //playSoundSoundPool(m_swordSwing2SoundId, false);
-                    //handler.postDelayed(r, 620);  // delay = duration of sound should be 620
+                    playSoundSoundPool(m_swordSwing2SoundId, false);
+                    handler.postDelayed(r, 620);  // delay = duration of sound should be 620
                 } else {
                     return;
                 }
@@ -289,10 +356,10 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         //Toast.makeText(MainSwordActivity.this, "Off!", Toast.LENGTH_SHORT).show();
     }
 
+
+
     private void showBladeColorDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        SwordOptionsDialog editNameDialog = new SwordOptionsDialog();
-        editNameDialog.show(fm, "fragment_edit_name");
+        customizeSwordDlg.show();
     }
 
     final Handler handler = new Handler();

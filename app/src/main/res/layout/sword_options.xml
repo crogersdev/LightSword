@@ -13,7 +13,8 @@
         android:background="@android:color/transparent"
         android:layout_marginRight="5dp"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:onClick="onClick"/>
     <ImageButton
         android:id="@+id/greenBladeDialog"
         android:src="@drawable/green_blade_dialog"
@@ -21,7 +22,8 @@
         android:layout_marginRight="5dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_toRightOf="@+id/redBladeDialog"/>
+        android:layout_toRightOf="@+id/redBladeDialog"
+        android:onClick="onClick"/>
     <ImageButton
         android:id="@+id/blueBladeDialog"
         android:src="@drawable/blue_blade_dialog"
@@ -29,14 +31,16 @@
         android:layout_marginRight="5dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_toRightOf="@+id/greenBladeDialog"/>
+        android:layout_toRightOf="@+id/greenBladeDialog"
+        android:onClick="onClick"/>
     <ImageButton
         android:id="@+id/purpleBladeDialog"
         android:src="@drawable/purple_blade_dialog"
         android:background="@android:color/transparent"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_toRightOf="@+id/blueBladeDialog"/>
+        android:layout_toRightOf="@+id/blueBladeDialog"
+        android:onClick="onClick"/>
 
     <!--
     <View
@@ -55,7 +59,8 @@
         android:background="@android:color/transparent"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/redBladeDialog" />
+        android:layout_below="@+id/redBladeDialog"
+        android:onClick="onClick"/>
 
     <ImageButton
         android:id="@+id/hilt2Dialog"
@@ -64,7 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_toRightOf="@+id/hilt1Dialog"
-        android:layout_alignBottom="@id/hilt1Dialog"/>
+        android:layout_alignBottom="@id/hilt1Dialog"
+        android:onClick="onClick"/>
 
     <ImageButton
         android:id="@+id/hilt3Dialog"
@@ -73,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_toRightOf="@+id/hilt2Dialog"
-        android:layout_alignBottom="@id/hilt2Dialog"/>
+        android:layout_alignBottom="@id/hilt2Dialog"
+        android:onClick="onClick"/>
 
 </RelativeLayout>
