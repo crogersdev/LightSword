@@ -234,6 +234,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     }
 
     @Override
+    // todo: consider moving all accelerometer data to its own class
     public synchronized void onSensorChanged(SensorEvent ev) {
         if (ev.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             getAccelerometer(ev);
