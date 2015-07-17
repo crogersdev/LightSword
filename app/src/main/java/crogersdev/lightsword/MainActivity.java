@@ -167,7 +167,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         m_swordState.m_isOn = false;
         // TODO: read from preferences here for defaults
         m_swordState.m_color = LightSwordState.bladeColor_e.BLUE;
-        m_swordState.m_hilt = 1;
+        m_swordState.m_hilt = 2;
 
         m_swooshSound = false;
         m_clashSound = false;
@@ -194,7 +194,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         // Animation loads
         m_animSwordOn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sword_on_anim);
 
-        customizeSwordDlg = new AlertDialog.Builder(MainActivity.this)
+        customizeSwordDlg = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_HOLO_DARK)
                 .setTitle("Customize your Light Sword")
                 .setView(swordOptionsView)
             .setPositiveButton(R.string.dlgConfirm, new DialogInterface.OnClickListener() {
@@ -397,6 +397,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     @Override
     protected void onDestroy() {
+        // todo: is this where we would close down the app on exit?  right now if you hit "power,"
+        // to turn the phone off, the app continues to hum as if the light saber is on (which it is)
         super.onDestroy();
     }
 
