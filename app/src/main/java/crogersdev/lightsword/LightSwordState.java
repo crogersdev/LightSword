@@ -1,20 +1,30 @@
 package crogersdev.lightsword;
 
 public class LightSwordState {
+
+    LightSwordState() {
+        this.m_color = bladeColor_e.BLUE;
+        this.m_hilt = 1;
+    }
+
     public boolean m_isOn;  // true for on, false for off
 
     public enum bladeColor_e {
-        RED,
-        GREEN,
-        BLUE,
-        PURPLE
+        RED(0), GREEN(1), BLUE(2), PURPLE(2);
+        private final int value;
+        bladeColor_e(int value) {
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
     }
 
     public bladeColor_e m_color;
 
     public int m_hilt;
 
-    public bladeColor_e getColor() {
+    public bladeColor_e getColorAsEnum() {
         return m_color;
     }
 }

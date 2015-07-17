@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     private View.OnClickListener m_viewListener;
 
     /* Buttons and Views */
-    private ImageButton m_hilt;
+    private ImageButton m_hiltBtn;
     private ImageButton m_bladeBtn;
 
     /* Sounds */
@@ -61,7 +61,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     /* Customize Dialog Stuff */
     AlertDialog customizeSwordDlg;
-    //SwordOptionsDialog customizeSwordDlg;
 
     private View swordOptionsView;
     private ImageButton m_dlgHilt1;
@@ -76,7 +75,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     Animation m_animSwordOn;
 
     protected void onInflateObjects() {
-        m_hilt     = (ImageButton) findViewById(R.id.btn_hilt);
+        m_hiltBtn  = (ImageButton) findViewById(R.id.btn_hilt);
         m_bladeBtn = (ImageButton) findViewById(R.id.btn_blade);
 
         LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
@@ -107,28 +106,26 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                     showBladeColorDialog();
                     break;
                 case R.id.purpleBladeDialog:
-
                     m_swordState.m_color = LightSwordState.bladeColor_e.PURPLE;
-                    m_bladeBtn.setImageResource(R.drawable.purple_blade_med);
                     break;
                 case R.id.redBladeDialog:
-
                     m_swordState.m_color = LightSwordState.bladeColor_e.RED;
-                    m_bladeBtn.setImageResource(R.drawable.red_blade_med);
                     break;
                 case R.id.greenBladeDialog:
-
                     m_swordState.m_color = LightSwordState.bladeColor_e.GREEN;
-                    m_bladeBtn.setImageResource(R.drawable.green_blade_med);
                     break;
                 case R.id.blueBladeDialog:
-
                     m_swordState.m_color = LightSwordState.bladeColor_e.BLUE;
-                    m_bladeBtn.setImageResource(R.drawable.blue_blade_med);
                     break;
                 case R.id.hilt1Dialog:
-                    
                     m_swordState.m_hilt = 1;
+                    break;
+                case R.id.hilt2Dialog:
+                    m_swordState.m_hilt = 2;
+                    break;
+                case R.id.hilt3Dialog:
+                    m_swordState.m_hilt = 3;
+                    break;
             } // end switch
         } // end onClick
         }; // end m_btnListener = onClickListener ...
@@ -136,15 +133,15 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     protected void onSetListeners() {
         //todo: this is ugly ugly ugly.  please replace with something cleaner.  does the onclick from xml work?
-        m_hilt.setOnClickListener(m_viewListener);
+        m_hiltBtn.setOnClickListener(m_viewListener);
         m_bladeBtn.setOnClickListener(m_viewListener);
         m_dlgHilt1.setOnClickListener(m_viewListener);
-        m_dlgHilt2.setOnClickListener(m_viewListener);;
-        m_dlgHilt3.setOnClickListener(m_viewListener);;
-        m_dlgColorBlue.setOnClickListener(m_viewListener);;
-        m_dlgColorGreen.setOnClickListener(m_viewListener);;
-        m_dlgColorRed.setOnClickListener(m_viewListener);;
-        m_dlgColorPurple.setOnClickListener(m_viewListener);;
+        m_dlgHilt2.setOnClickListener(m_viewListener);
+        m_dlgHilt3.setOnClickListener(m_viewListener);
+        m_dlgColorBlue.setOnClickListener(m_viewListener);
+        m_dlgColorGreen.setOnClickListener(m_viewListener);
+        m_dlgColorRed.setOnClickListener(m_viewListener);
+        m_dlgColorPurple.setOnClickListener(m_viewListener);
     }
 
     @Override
@@ -203,7 +200,34 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
             .setPositiveButton(R.string.dlgConfirm, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     Toast.makeText(MainActivity.this, "dialog clicked", Toast.LENGTH_SHORT).show();
-                    //todo: update light sword properties and re-draw
+                    m_hiltBtn.setImageDrawable(null);
+                    m_bladeBtn.setImageDrawable(null);
+
+                    switch (m_swordState.m_hilt) {
+                        case 1:
+                            m_hiltBtn.setBackgroundResource(R.drawable.hilt1_med);
+                            break;
+                        case 2:
+                            m_hiltBtn.setBackgroundResource(R.drawable.hilt2_med);
+                            break;
+                        case 3:
+                            m_hiltBtn.setBackgroundResource(R.drawable.hilt3_med);
+                            break;
+                    }
+                    switch (m_swordState.getColorAsEnum()) {
+                        case BLUE:
+                            m_bladeBtn.setBackgroundResource(R.drawable.blue_blade_med);
+                            break;
+                        case RED:
+                            m_bladeBtn.setBackgroundResource(R.drawable.red_blade_med);
+                            break;
+                        case GREEN:
+                            m_bladeBtn.setBackgroundResource(R.drawable.green_blade_med);
+                            break;
+                        case PURPLE:
+                            m_bladeBtn.setBackgroundResource(R.drawable.purple_blade_med);
+                            break;
+                    }
                 }
             })
             .setNegativeButton(R.string.dlgCancel, null).create();
@@ -278,7 +302,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 } else {
                     return;
                 }
-
             }
 
             // High negative delta from previous to current means you're swinging and then stopping, play clash
@@ -356,11 +379,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         //Toast.makeText(MainSwordActivity.this, "Off!", Toast.LENGTH_SHORT).show();
     }
 
-
-
-    private void showBladeColorDialog() {
-        customizeSwordDlg.show();
-    }
+    private void showBladeColorDialog() { customizeSwordDlg.show(); }
 
     final Handler handler = new Handler();
     final Runnable r = new Runnable() {
