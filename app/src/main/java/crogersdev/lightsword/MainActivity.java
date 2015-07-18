@@ -1,6 +1,7 @@
 package crogersdev.lightsword;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.hardware.Sensor;
@@ -23,7 +24,7 @@ import android.view.animation.AnimationUtils;
 
 import java.util.HashMap;
 
-public class MainActivity extends FragmentActivity implements SensorEventListener {
+public class MainActivity extends FragmentActivity implements SensorEventListener, SwordOptionsDialog.DlgIfc {
 
     /* Accelerometer Fun */
     private SensorManager m_sensorMgr;
@@ -197,9 +198,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         customizeSwordDlg = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_HOLO_DARK)
                 .setTitle("Customize your Light Sword")
                 .setView(swordOptionsView)
-            .setPositiveButton(R.string.dlgConfirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dlgConfirm, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    Toast.makeText(MainActivity.this, "dialog clicked", Toast.LENGTH_SHORT).show();
                     m_hiltBtn.setImageDrawable(null);
                     m_bladeBtn.setImageDrawable(null);
 
@@ -378,6 +378,11 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         }
 
         //Toast.makeText(MainSwordActivity.this, "Off!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void okClicked(DialogFragment dlg) {
+
     }
 
     private void showBladeColorDialog() { customizeSwordDlg.show(); }
