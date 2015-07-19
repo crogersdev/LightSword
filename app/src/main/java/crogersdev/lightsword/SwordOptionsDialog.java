@@ -10,9 +10,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class SwordOptionsDialog extends DialogFragment {
 
+    private View swordOptionsView;
+    private ImageButton m_dlgHilt1;
+    private ImageButton m_dlgHilt2;
+    private ImageButton m_dlgHilt3;
+    private ImageButton m_dlgColorBlue;
+    private ImageButton m_dlgColorGreen;
+    private ImageButton m_dlgColorRed;
+    private ImageButton m_dlgColorPurple;
+    
     public interface DlgIfc {
         // 'ok' of 'cancel'
         public void okClicked(DialogFragment dlg);
@@ -35,6 +45,15 @@ public class SwordOptionsDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
+        swordOptionsView = inflater.inflate(R.layout.sword_options, null);
+
+        m_dlgHilt1       = (ImageButton) swordOptionsView.findViewById(R.id.hilt1Dialog);
+        m_dlgHilt2       = (ImageButton) swordOptionsView.findViewById(R.id.hilt2Dialog);
+        m_dlgHilt3       = (ImageButton) swordOptionsView.findViewById(R.id.hilt3Dialog);
+        m_dlgColorBlue   = (ImageButton) swordOptionsView.findViewById(R.id.blueBladeDialog);
+        m_dlgColorGreen  = (ImageButton) swordOptionsView.findViewById(R.id.greenBladeDialog);
+        m_dlgColorRed    = (ImageButton) swordOptionsView.findViewById(R.id.redBladeDialog);
+        m_dlgColorPurple = (ImageButton) swordOptionsView.findViewById(R.id.purpleBladeDialog);
 
         builder.setView(inflater.inflate(R.layout.sword_options, null))
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

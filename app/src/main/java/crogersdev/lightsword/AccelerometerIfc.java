@@ -1,11 +1,11 @@
-package crogersdev.lightsword;
+/*package crogersdev.lightsword;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 public class AccelerometerIfc implements SensorEventListener {
-    /* Accelerometer Fun */
+    *//* Accelerometer Fun *//*
     private SensorManager m_sensorMgr;
     private Sensor m_accelerometer;
     private final float m_noise = (float) 5.0;
@@ -15,4 +15,4 @@ public class AccelerometerIfc implements SensorEventListener {
     private float[] m_lastY;
     private float[] m_lastZ;
     boolean m_xyzInitialized;
-}
+}*/

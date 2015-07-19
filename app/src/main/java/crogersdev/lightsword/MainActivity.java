@@ -62,6 +62,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     /* Customize Dialog Stuff */
     AlertDialog customizeSwordDlg;
+    SwordOptionsDialog customSwordDlg;
 
     private View swordOptionsView;
     private ImageButton m_dlgHilt1;
@@ -104,7 +105,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                     toggleSword();
                     break;
                 case R.id.btn_blade:
-                    showBladeColorDialog();
+                    //showBladeColorDialog();
+                    customSwordDlg.show(getFragmentManager(), "blah!");
                     break;
                 case R.id.purpleBladeDialog:
                     m_swordState.m_color = LightSwordState.bladeColor_e.PURPLE;
@@ -231,6 +233,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 }
             })
             .setNegativeButton(R.string.dlgCancel, null).create();
+
+        customSwordDlg = new SwordOptionsDialog();
     }
 
     @Override
@@ -382,7 +386,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     @Override
     public void okClicked(DialogFragment dlg) {
-
+        Toast.makeText(MainActivity.this, "okClicked", Toast.LENGTH_SHORT).show();
     }
 
     private void showBladeColorDialog() { customizeSwordDlg.show(); }
