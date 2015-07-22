@@ -61,17 +61,17 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     LightSwordState m_swordState;
 
     /* Customize Dialog Stuff */
-    AlertDialog customizeSwordDlg;
+    //AlertDialog customizeSwordDlg;
     SwordOptionsDialog customSwordDlg;
 
-    private View swordOptionsView;
-    private ImageButton m_dlgHilt1;
-    private ImageButton m_dlgHilt2;
-    private ImageButton m_dlgHilt3;
-    private ImageButton m_dlgColorBlue;
-    private ImageButton m_dlgColorGreen;
-    private ImageButton m_dlgColorRed;
-    private ImageButton m_dlgColorPurple;
+//    private View swordOptionsView;
+//    private ImageButton m_dlgHilt1;
+//    private ImageButton m_dlgHilt2;
+//    private ImageButton m_dlgHilt3;
+//    private ImageButton m_dlgColorBlue;
+//    private ImageButton m_dlgColorGreen;
+//    private ImageButton m_dlgColorRed;
+//    private ImageButton m_dlgColorPurple;
 
     /* Animation */
     Animation m_animSwordOn;
@@ -80,16 +80,16 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         m_hiltBtn  = (ImageButton) findViewById(R.id.btn_hilt);
         m_bladeBtn = (ImageButton) findViewById(R.id.btn_blade);
 
-        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-        swordOptionsView = inflater.inflate(R.layout.sword_options, null);
-
-        m_dlgHilt1       = (ImageButton) swordOptionsView.findViewById(R.id.hilt1Dialog);
-        m_dlgHilt2       = (ImageButton) swordOptionsView.findViewById(R.id.hilt2Dialog);
-        m_dlgHilt3       = (ImageButton) swordOptionsView.findViewById(R.id.hilt3Dialog);
-        m_dlgColorBlue   = (ImageButton) swordOptionsView.findViewById(R.id.blueBladeDialog);
-        m_dlgColorGreen  = (ImageButton) swordOptionsView.findViewById(R.id.greenBladeDialog);
-        m_dlgColorRed    = (ImageButton) swordOptionsView.findViewById(R.id.redBladeDialog);
-        m_dlgColorPurple = (ImageButton) swordOptionsView.findViewById(R.id.purpleBladeDialog);
+//        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+//        swordOptionsView = inflater.inflate(R.layout.sword_options, null);
+//
+//        m_dlgHilt1       = (ImageButton) swordOptionsView.findViewById(R.id.hilt1Dialog);
+//        m_dlgHilt2       = (ImageButton) swordOptionsView.findViewById(R.id.hilt2Dialog);
+//        m_dlgHilt3       = (ImageButton) swordOptionsView.findViewById(R.id.hilt3Dialog);
+//        m_dlgColorBlue   = (ImageButton) swordOptionsView.findViewById(R.id.blueBladeDialog);
+//        m_dlgColorGreen  = (ImageButton) swordOptionsView.findViewById(R.id.greenBladeDialog);
+//        m_dlgColorRed    = (ImageButton) swordOptionsView.findViewById(R.id.redBladeDialog);
+//        m_dlgColorPurple = (ImageButton) swordOptionsView.findViewById(R.id.purpleBladeDialog);
 
         // SoundPool ctor: int maxStreams, int streamType, int srcQuality
         m_soundPool = new SoundPool(12, 3, 0);
@@ -138,13 +138,13 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         //todo: this is ugly ugly ugly.  please replace with something cleaner.  does the onclick from xml work?
         m_hiltBtn.setOnClickListener(m_viewListener);
         m_bladeBtn.setOnClickListener(m_viewListener);
-        m_dlgHilt1.setOnClickListener(m_viewListener);
-        m_dlgHilt2.setOnClickListener(m_viewListener);
-        m_dlgHilt3.setOnClickListener(m_viewListener);
-        m_dlgColorBlue.setOnClickListener(m_viewListener);
-        m_dlgColorGreen.setOnClickListener(m_viewListener);
-        m_dlgColorRed.setOnClickListener(m_viewListener);
-        m_dlgColorPurple.setOnClickListener(m_viewListener);
+//        m_dlgHilt1.setOnClickListener(m_viewListener);
+//        m_dlgHilt2.setOnClickListener(m_viewListener);
+//        m_dlgHilt3.setOnClickListener(m_viewListener);
+//        m_dlgColorBlue.setOnClickListener(m_viewListener);
+//        m_dlgColorGreen.setOnClickListener(m_viewListener);
+//        m_dlgColorRed.setOnClickListener(m_viewListener);
+//        m_dlgColorPurple.setOnClickListener(m_viewListener);
     }
 
     @Override
@@ -197,7 +197,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         // Animation loads
         m_animSwordOn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sword_on_anim);
 
-        customizeSwordDlg = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_HOLO_DARK)
+        /*customizeSwordDlg = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_HOLO_DARK)
                 .setTitle("Customize your Light Sword")
                 .setView(swordOptionsView)
                 .setPositiveButton(R.string.dlgConfirm, new DialogInterface.OnClickListener() {
@@ -232,7 +232,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                     }
                 }
             })
-            .setNegativeButton(R.string.dlgCancel, null).create();
+            .setNegativeButton(R.string.dlgCancel, null).create();*/
 
         customSwordDlg = new SwordOptionsDialog();
     }
@@ -389,7 +389,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         Toast.makeText(MainActivity.this, "okClicked", Toast.LENGTH_SHORT).show();
     }
 
-    private void showBladeColorDialog() { customizeSwordDlg.show(); }
+    //private void showBladeColorDialog() { customizeSwordDlg.show(); }
 
     final Handler handler = new Handler();
     final Runnable r = new Runnable() {
