@@ -11,13 +11,14 @@ public class LightSwordState {
 
     public enum bladeColor_e {
         RED(0), GREEN(1), BLUE(2), PURPLE(2);
-        private final int value;
+        private int value;
         bladeColor_e(int value) {
             this.value = value;
         }
         public int getValue() {
             return value;
         }
+        public void setValue(int v) { this.value = v; }
     }
 
     public bladeColor_e m_bladeColor;

@@ -145,7 +145,11 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         m_animSwordOn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sword_on_anim);
 
         // Customize LightSword
-        customSwordDlg = new SwordOptionsDialog();
+        customSwordDlg = SwordOptionsDialog.newInstance(m_swordState.m_hilt, m_swordState.m_bladeColor);
+
+        if (customSwordDlg == null) {
+            Toast.makeText(MainActivity.this, "null!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -297,7 +301,9 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     @Override
     public void okClicked(int newHiltSelection, LightSwordState.bladeColor_e newBladeColor) {
-        //Toast.makeText(MainActivity.this, "okClicked", Toast.LENGTH_SHORT).show();
+        Integer hilt = newHiltSelection;
+        Integer blade = newBladeColor.getValue();
+        Toast.makeText(MainActivity.this, "hilt: " + hilt.toString() + " color: " + blade.toString(), Toast.LENGTH_SHORT).show();
         m_swordState.m_bladeColor = newBladeColor;
         m_swordState.m_hilt = newHiltSelection;
         redrawSword();

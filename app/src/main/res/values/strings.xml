@@ -6,4 +6,7 @@
 
     <string name="dlgCancel">Cancel</string>
     <string name="dlgConfirm">OK</string>
+
+    <string name="currentHilt">Current Hilt</string>
+    <string name="currentBladeColor">Current Blade Colord</string>
 </resources>
