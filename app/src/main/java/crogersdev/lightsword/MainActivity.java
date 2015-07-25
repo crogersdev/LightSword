@@ -303,7 +303,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     public void okClicked(int newHiltSelection, LightSwordState.bladeColor_e newBladeColor) {
         Integer hilt = newHiltSelection;
         Integer blade = newBladeColor.getValue();
-        Toast.makeText(MainActivity.this, "hilt: " + hilt.toString() + " color: " + blade.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, "hilt: " + hilt.toString() + " color: " + blade.toString(), Toast.LENGTH_SHORT).show();
         m_swordState.m_bladeColor = newBladeColor;
         m_swordState.m_hilt = newHiltSelection;
         redrawSword();

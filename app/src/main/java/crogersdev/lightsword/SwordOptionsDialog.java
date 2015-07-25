@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class SwordOptionsDialog extends DialogFragment implements android.view.View.OnClickListener {
+public class SwordOptionsDialog extends DialogFragment {
 
     private View m_swordOptionsView;
 
@@ -62,36 +62,6 @@ public class SwordOptionsDialog extends DialogFragment implements android.view.V
     }
 
     @Override
-    public void onClick(View v) {
-        Log.d("LOG_CROGERS", "onClick in swordOptionsDialog called");
-        int btnId = v.getId();
-        switch (btnId) {
-            case R.id.hilt1Dialog:
-                m_hilt = 1;
-                break;
-            case R.id.hilt2Dialog:
-                m_hilt = 2;
-                break;
-            case R.id.hilt3Dialog:
-                m_hilt = 3;
-                break;
-
-            case R.id.redBladeDialog:
-                m_bladeColor = LightSwordState.bladeColor_e.RED;
-                break;
-            case R.id.greenBladeDialog:
-                m_bladeColor = LightSwordState.bladeColor_e.GREEN;
-                break;
-            case R.id.blueBladeDialog:
-                m_bladeColor = LightSwordState.bladeColor_e.BLUE;
-                break;
-            case R.id.purpleBladeDialog:
-                m_bladeColor = LightSwordState.bladeColor_e.PURPLE;
-                break;
-        }
-    }
-
-    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         m_hilt = getArguments().getInt(CUR_HILT);
@@ -110,19 +80,51 @@ public class SwordOptionsDialog extends DialogFragment implements android.view.V
         m_dlgColorRed    = (ImageButton) m_swordOptionsView.findViewById(R.id.redBladeDialog);
         m_dlgColorPurple = (ImageButton) m_swordOptionsView.findViewById(R.id.purpleBladeDialog);
 
-        m_dlgHilt1.setOnClickListener(this);
-        m_dlgHilt2.setOnClickListener(this);
-        m_dlgHilt3.setOnClickListener(this);
-        m_dlgColorBlue.setOnClickListener(this);
-        m_dlgColorGreen.setOnClickListener(this);
-        m_dlgColorRed.setOnClickListener(this);
-        m_dlgColorPurple.setOnClickListener(this);
+        m_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("LOG_CROGERS", "onClick in swordOptionsDialog called");
+                int btnId = v.getId();
+                switch (btnId) {
+                    case R.id.hilt1Dialog:
+                        m_hilt = 1;
+                        break;
+                    case R.id.hilt2Dialog:
+                        m_hilt = 2;
+                        break;
+                    case R.id.hilt3Dialog:
+                        m_hilt = 3;
+                        break;
 
-        builder.setView(inflater.inflate(R.layout.sword_options, null))
-               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialogInterface, int i) {
-                       m_callback.okClicked(m_hilt, m_bladeColor);
+                    case R.id.redBladeDialog:
+                        m_bladeColor = LightSwordState.bladeColor_e.RED;
+                        break;
+                    case R.id.greenBladeDialog:
+                        m_bladeColor = LightSwordState.bladeColor_e.GREEN;
+                        break;
+                    case R.id.blueBladeDialog:
+                        m_bladeColor = LightSwordState.bladeColor_e.BLUE;
+                        break;
+                    case R.id.purpleBladeDialog:
+                        m_bladeColor = LightSwordState.bladeColor_e.PURPLE;
+                        break;
+                }
+            }
+        };
+
+        m_dlgHilt1.setOnClickListener(m_listener);
+        m_dlgHilt2.setOnClickListener(m_listener);
+        m_dlgHilt3.setOnClickListener(m_listener);
+        m_dlgColorBlue.setOnClickListener(m_listener);
+        m_dlgColorGreen.setOnClickListener(m_listener);
+        m_dlgColorRed.setOnClickListener(m_listener);
+        m_dlgColorPurple.setOnClickListener(m_listener);
+
+        builder.setView(m_swordOptionsView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        m_callback.okClicked(m_hilt, m_bladeColor);
                    }
                })
                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
