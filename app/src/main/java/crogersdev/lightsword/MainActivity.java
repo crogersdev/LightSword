@@ -21,18 +21,7 @@ import android.view.animation.AnimationUtils;
 
 import java.util.HashMap;
 
-public class MainActivity extends FragmentActivity implements SensorEventListener, SwordOptionsDialog.DlgIfc {
-
-    /* Accelerometer Fun */
-    private SensorManager m_sensorMgr;
-    private Sensor m_accelerometer;
-    private final float m_noise = (float) 5.0;
-    private final float m_clashThreshold = (float) 25.0;
-    private final float m_swooshThreshold = (float) 8.0;
-    private float[] m_lastX;
-    private float[] m_lastY;
-    private float[] m_lastZ;
-    boolean m_xyzInitialized;
+public class MainActivity extends FragmentActivity implements AccelerometerIfc.Event, SwordOptionsDialog.DlgIfc {
 
     /* Listeners */
     private View.OnClickListener m_viewListener;
@@ -59,6 +48,9 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     /* Customize Dialog Stuff */
     SwordOptionsDialog customSwordDlg;
+
+    /* Accelerometer Object */
+    AccelerometerIfc m_accelIfc;
 
     /* Animation */
     Animation m_animSwordOn;
@@ -89,7 +81,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     }
 
     protected void onSetListeners() {
-        //todo: this is ugly ugly ugly.  please replace with something cleaner.  does the onclick from xml work?
         m_hiltBtn.setOnClickListener(m_viewListener);
         m_bladeBtn.setOnClickListener(m_viewListener);
     }
@@ -133,13 +124,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         m_soundMap.put(m_swordHumSoundId, m_soundPool.load(this, R.raw.hum2, 1));
 
         // setup accelerometer stuff
-        m_lastX = new float[3];
-        m_lastY = new float[3];
-        m_lastZ = new float[3];
-        m_xyzInitialized = false;
-        m_sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
-        m_accelerometer = m_sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        m_sensorMgr.registerListener(this, m_accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        m_accelIfc = new AccelerometerIfc(this, m_swordState);
 
         // Animation loads
         m_animSwordOn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sword_on_anim);
@@ -149,117 +134,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
         if (customSwordDlg == null) {
             Toast.makeText(MainActivity.this, "null!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    // todo: consider moving all accelerometer data to its own class
-    public synchronized void onSensorChanged(SensorEvent ev) {
-        if (ev.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            getAccelerometer(ev);
-        }
-    }
-
-    private void getAccelerometer(SensorEvent ev) {
-        float[] aValues = ev.values;
-        float currentX = aValues[0];
-        float currentY = aValues[1];
-        float currentZ = aValues[2];
-
-        if (!m_xyzInitialized) {
-            m_lastX[0] = currentX;
-            m_lastX[1] = currentX;
-            m_lastX[2] = currentX;
-
-            m_lastY[0] = currentY;
-            m_lastY[1] = currentY;
-            m_lastY[2] = currentY;
-
-            m_lastZ[0] = currentZ;
-            m_lastZ[1] = currentZ;
-            m_lastZ[2] = currentZ;
-
-            m_xyzInitialized = true;
-        } else {
-            float deltaX = Math.abs(m_lastX[0] - currentX);
-            float deltaY = Math.abs(m_lastY[0] - currentY);
-            float deltaZ = Math.abs(m_lastZ[0] - currentZ);
-
-            if (deltaX < m_noise) deltaX = (float) 0.0;
-            if (deltaY < m_noise) deltaY = (float) 0.0;
-            if (deltaZ < m_noise) deltaZ = (float) 0.0;
-
-            m_lastX[0] = currentX;
-            m_lastY[0] = currentY;
-            m_lastZ[0] = currentZ;
-
-            m_lastX[1] = m_lastX[0];
-            m_lastY[1] = m_lastY[0];
-            m_lastZ[1] = m_lastZ[0];
-
-            m_lastX[2] = m_lastX[1];
-            m_lastY[2] = m_lastY[1];
-            m_lastZ[2] = m_lastZ[1];
-
-            double avgX = (m_lastX[0] + m_lastX[1] + m_lastX[2]) / 3.0;
-            double avgY = (m_lastY[0] + m_lastY[1] + m_lastY[2]) / 3.0;
-            double avgZ = (m_lastZ[0] + m_lastZ[1] + m_lastZ[2]) / 3.0;
-
-            /** Conditions for sound playing */
-
-            // High average value for all three last values means swinging, play swoosh
-            // but don't interrupt if already playing swoosh currently.
-
-            if ((deltaX > m_noise ||
-                 deltaY > m_noise ||
-                 deltaZ > m_noise) &&
-                m_swordState.m_isOn) {
-                // TODO: randomize the swing sound so it doesn't sound exactly the same each time
-                if (!m_swooshSound) {
-                    m_swooshSound = true;
-                    playSoundSoundPool(m_swordSwing2SoundId, false);
-                    handler.postDelayed(r, 620);  // delay = duration of sound should be 620
-                } else {
-                    return;
-                }
-            }
-
-            // High negative delta from previous to current means you're swinging and then stopping, play clash
-            if ((currentX < m_noise && deltaX > m_clashThreshold ||
-                 currentY < m_noise && deltaY > m_clashThreshold ||
-                 currentY < m_noise && deltaZ > m_clashThreshold) &&
-                m_swordState.m_isOn) {
-                // TODO: light up LED for split second
-
-                if (!m_clashSound) {
-                    m_clashSound = true;
-                    playSoundSoundPool(m_swordClashSoundId, false);
-                    handler.postDelayed(r, 1340); // delay = duration of sound
-                } else {
-                    return;
-                }
-            }
-
-            // Sudden change in direction means a clash
-            if ((Math.abs(currentX - m_lastX[2]) > 15.0 ||
-                 Math.abs(currentY - m_lastY[2]) > 15.0 ||
-                 Math.abs(currentY - m_lastZ[2]) > 15.0) &&
-                m_swordState.m_isOn) {
-
-                if (!m_clashSound) {
-                    m_clashSound = true;
-                    playSoundSoundPool(m_swordClashSoundId, false);
-                    handler.postDelayed(r, 1340); // delay = duration of sound
-                } else {
-                    return;
-                }
-            }
-            // TODO: customize sensitivity - allow the user to figure it out themselves
-
-            // TODO: block the laser fire?
-
-            // TODO: make sure you get the "stab the ground" action from lego star wars
-
         }
     }
 
@@ -358,11 +232,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         super.onDestroy();
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // ignore
-    }
-
     // NOTE: must implement onResume and onPause to deregister accelerometer listener call back
     // so that you conserve battery life and don't let the callback sit there waiting
     protected void onResume() {
@@ -371,6 +240,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     }
 
     protected void onPause() {
+        // todo: on screen lock stop the sound pool
         super.onPause();
         m_sensorMgr.unregisterListener(this);
         m_soundPool.stop(m_humId);
