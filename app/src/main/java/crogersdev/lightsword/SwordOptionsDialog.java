@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,7 +69,7 @@ public class SwordOptionsDialog extends DialogFragment {
         int tmp = getArguments().getInt(CUR_BLADECOLOR);
         m_bladeColor = LightSwordState.bladeColor_e.values()[tmp];
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         m_swordOptionsView = inflater.inflate(R.layout.sword_options, null);
 
@@ -121,10 +122,10 @@ public class SwordOptionsDialog extends DialogFragment {
         m_dlgColorPurple.setOnClickListener(m_listener);
 
         builder.setView(m_swordOptionsView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        m_callback.okClicked(m_hilt, m_bladeColor);
+               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       m_callback.okClicked(m_hilt, m_bladeColor);
                    }
                })
                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

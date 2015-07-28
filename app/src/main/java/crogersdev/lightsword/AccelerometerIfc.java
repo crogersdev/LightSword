@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public class AccelerometerIfc implements SensorEventListener {
 
@@ -20,15 +21,15 @@ public class AccelerometerIfc implements SensorEventListener {
     private float[] m_lastZ;
     boolean m_xyzInitialized;
 
-    public interface Event {
+    public interface EventCB {
         void swooshEvent();
         void clashEvent();
     }
 
-    Event m_callback;
+    EventCB m_callback;
 
     AccelerometerIfc(Context cxt, LightSwordState curState) {
-
+        Log.d("CROGERSDEV", "Inside getAccelerometer");
         m_swordState = curState;
 
         // setup accelerometer stuff
@@ -39,6 +40,14 @@ public class AccelerometerIfc implements SensorEventListener {
         m_sensorMgr = (SensorManager) cxt.getSystemService(cxt.SENSOR_SERVICE);
         m_accelerometer = m_sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         m_sensorMgr.registerListener(this, m_accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+
+        try {
+            m_callback = (EventCB) cxt;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("AccelerometerIfc class must implement callback interface");
+        }
+
     }
 
     @Override
@@ -50,6 +59,7 @@ public class AccelerometerIfc implements SensorEventListener {
     }
 
     private void getAccelerometer(SensorEvent ev) {
+        Log.d("CROGERSDEV", "Inside getAccelerometer");
         float[] aValues = ev.values;
         float currentX = aValues[0];
         float currentY = aValues[1];
@@ -101,11 +111,9 @@ public class AccelerometerIfc implements SensorEventListener {
             /** Conditions for sound playing */
 
             // High average value for all three last values means swinging, play swoosh
-            // but don't interrupt if already playing swoosh currently.
-
             if ((deltaX > m_noise || deltaY > m_noise || deltaZ > m_noise) && m_swordState.m_isOn) {
                 // TODO: randomize the swing sound so it doesn't sound exactly the same each time
-                // todo: callback to play swoosh sound
+                m_callback.swooshEvent();
             } else {
                 return;
             }
@@ -113,15 +121,15 @@ public class AccelerometerIfc implements SensorEventListener {
             // High negative delta from previous to current means you're swinging and then stopping, play clash
             if ((currentX < m_noise && deltaX > m_clashThreshold || currentY < m_noise && deltaY > m_clashThreshold || currentY < m_noise && deltaZ > m_clashThreshold) && m_swordState.m_isOn) {
                 // TODO: light up LED for split second
-                // todo: callback for play clash
+                m_callback.clashEvent();
             } else {
                 return;
             }
 
             // Sudden change in direction means a clash
             if ((Math.abs(currentX - m_lastX[2]) > 15.0 || Math.abs(currentY - m_lastY[2]) > 15.0 || Math.abs(currentY - m_lastZ[2]) > 15.0) && m_swordState.m_isOn) {
-
                 //todo: play clash sound
+                m_callback.clashEvent();
             } else {
                 return;
             }
@@ -134,9 +142,16 @@ public class AccelerometerIfc implements SensorEventListener {
 
     }
 
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // ignore
+    }
+
+    void registerListener() {
+        m_sensorMgr.registerListener(this, m_accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    void unregisterListener() {
+        m_sensorMgr.unregisterListener(this);
     }
 }

@@ -1,11 +1,6 @@
 package crogersdev.lightsword;
 
-import android.app.DialogFragment;
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -21,7 +16,7 @@ import android.view.animation.AnimationUtils;
 
 import java.util.HashMap;
 
-public class MainActivity extends FragmentActivity implements AccelerometerIfc.Event, SwordOptionsDialog.DlgIfc {
+public class MainActivity extends FragmentActivity implements AccelerometerIfc.EventCB, SwordOptionsDialog.DlgIfc {
 
     /* Listeners */
     private View.OnClickListener m_viewListener;
@@ -100,7 +95,6 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
         onSetListeners();
 
         // TODO: make all of the initialization functions in their own little "do all" function
-        // group similar to above
 
         m_bladeBtn.setVisibility(View.INVISIBLE);
 
@@ -131,10 +125,6 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
 
         // Customize LightSword
         customSwordDlg = SwordOptionsDialog.newInstance(m_swordState.m_hilt, m_swordState.m_bladeColor);
-
-        if (customSwordDlg == null) {
-            Toast.makeText(MainActivity.this, "null!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
@@ -175,12 +165,33 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
 
     @Override
     public void okClicked(int newHiltSelection, LightSwordState.bladeColor_e newBladeColor) {
-        Integer hilt = newHiltSelection;
-        Integer blade = newBladeColor.getValue();
+        //Integer hilt = newHiltSelection;
+        //Integer blade = newBladeColor.getValue();
         //Toast.makeText(MainActivity.this, "hilt: " + hilt.toString() + " color: " + blade.toString(), Toast.LENGTH_SHORT).show();
         m_swordState.m_bladeColor = newBladeColor;
         m_swordState.m_hilt = newHiltSelection;
         redrawSword();
+    }
+
+    @Override
+    public void swooshEvent() {
+        // todo: randomize between m_swordSwing2SoundId and m_swordSwing1SoundId
+        if (!m_swooshSound) {
+            m_swooshSound = true;
+            playSoundSoundPool(m_swordSwing2SoundId, false);
+            handler.postDelayed(r, 620); // delay = duration of sound should be 620 ms
+        } else {
+            return;
+        }
+    }
+
+    @Override
+    public void clashEvent() {
+        if (!m_clashSound) {
+            m_clashSound = true;
+            playSoundSoundPool(m_swordClashSoundId, false);
+            handler.postDelayed(r, 1340); // delay = duration of sound should be 1340ms
+        }
     }
 
     private void redrawSword() {
@@ -236,13 +247,13 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
     // so that you conserve battery life and don't let the callback sit there waiting
     protected void onResume() {
         super.onResume();
-        m_sensorMgr.registerListener(this, m_accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        m_accelIfc.registerListener();
     }
 
     protected void onPause() {
         // todo: on screen lock stop the sound pool
         super.onPause();
-        m_sensorMgr.unregisterListener(this);
+        m_accelIfc.unregisterListener();
         m_soundPool.stop(m_humId);
     }
 }
