@@ -18,6 +18,8 @@ import android.view.animation.AnimationUtils;
 import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity implements AccelerometerIfc.EventCB, SwordOptionsDialog.DlgIfc {
+    /* Logger Tag */
+    private static final String LOG_TAG = "log_mainactivity";
 
     /* Listeners */
     private View.OnClickListener m_viewListener;
@@ -164,10 +166,6 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
 
     @Override
     public void okClicked(int newHiltSelection, LightSwordState.bladeColor_e newBladeColor) {
-        Integer hilt = newHiltSelection;
-        Integer blade = newBladeColor.getValue();
-        Log.d("crogersdev", "back in main activity callback");
-        Log.d("crogersdev", "hilt: " + hilt.toString() + " color: " + blade.toString());
         m_swordState.m_bladeColor = newBladeColor;
         m_swordState.m_hilt = newHiltSelection;
         redrawSword();

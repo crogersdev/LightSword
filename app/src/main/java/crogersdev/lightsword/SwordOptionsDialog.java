@@ -13,8 +13,9 @@ import android.widget.ImageButton;
 
 public class SwordOptionsDialog extends DialogFragment {
 
-    private View m_swordOptionsView;
+    private static String LOG_TAG = "log_swordoptionsdlg";
 
+    private View m_swordOptionsView;
     private View.OnClickListener m_listener;
 
     private ImageButton m_dlgHilt1;
@@ -25,26 +26,17 @@ public class SwordOptionsDialog extends DialogFragment {
     private ImageButton m_dlgColorRed;
     private ImageButton m_dlgColorPurple;
 
-    private int m_hilt;
-    private LightSwordState.bladeColor_e m_bladeColor;
-
-    private static final String CUR_HILT = "current hilt";
-    private static final String CUR_BLADECOLOR = "current blade color";
+    private static int m_hilt;
+    private static LightSwordState.bladeColor_e m_bladeColor;
 
     public SwordOptionsDialog() {}
 
     public static SwordOptionsDialog newInstance(int curHilt,
                                                        LightSwordState.bladeColor_e curBladeColor) {
-        Log.d("crogersdev", "new dialog being created");
-        Integer h, b;
-        h = curHilt;
-        b = curBladeColor.getValue();
-        Log.d("crogersdev", "init'd with hilt " + h.toString() + " and blade " + b.toString());
+        m_hilt = curHilt;
+        m_bladeColor = curBladeColor;
+
         SwordOptionsDialog fragment = new SwordOptionsDialog();
-        Bundle bundle = new Bundle(2);
-        bundle.putInt(CUR_HILT, curHilt);
-        bundle.putInt(CUR_BLADECOLOR, curBladeColor.getValue());
-        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -69,10 +61,6 @@ public class SwordOptionsDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        m_hilt = getArguments().getInt(CUR_HILT);
-        int tmp = getArguments().getInt(CUR_BLADECOLOR);
-        m_bladeColor = LightSwordState.bladeColor_e.values()[tmp];
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         m_swordOptionsView = inflater.inflate(R.layout.sword_options, null);
@@ -86,18 +74,10 @@ public class SwordOptionsDialog extends DialogFragment {
         m_dlgColorPurple = (ImageButton) m_swordOptionsView.findViewById(R.id.purpleBladeDialog);
 
         m_listener = new View.OnClickListener() {
+            Integer h, c;
             @Override
             public void onClick(View v) {
-                //Log.d("LOG_CROGERS", "onClick in swordOptionsDialog called");
                 int btnId = v.getId();
-                Integer clicked = btnId;
-                Log.d("crogersdev", "button clicked: " + clicked.toString());
-                Integer h, b;
-                h = m_hilt;
-                b = m_bladeColor.getValue();
-                Log.d("crogersdev", "m_hilt before: " + h.toString() + ", blade before" +
-                        "" +
-                        ": " + b.toString());
                 switch (btnId) {
                     case R.id.hilt1Dialog:
                         m_hilt = 1;
@@ -137,10 +117,6 @@ public class SwordOptionsDialog extends DialogFragment {
                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                    @Override
                    public void onClick(DialogInterface dialogInterface, int i) {
-                       Integer h, b;
-                       h = m_hilt;
-                       b = m_bladeColor.getValue();
-                       Log.d("crogersdev", "hilt selected: " + h.toString() + ", blade selected: " + b.toString());
                        m_callback.okClicked(m_hilt, m_bladeColor);
                    }
                })

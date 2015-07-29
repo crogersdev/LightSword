@@ -3,7 +3,7 @@ package crogersdev.lightsword;
 public class LightSwordState {
 
     LightSwordState() {
-        this.m_bladeColor = bladeColor_e.BLUE;
+        this.m_bladeColor = bladeColor_e.GREEN;
         this.m_hilt = 1;
     }
 

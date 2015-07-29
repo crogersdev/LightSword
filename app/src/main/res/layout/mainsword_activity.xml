@@ -16,7 +16,7 @@
 
     <ImageButton
         android:id="@+id/btn_blade"
-        android:src="@drawable/blue_blade_med"
+        android:src="@drawable/green_blade_med"
         android:background="@android:color/transparent"
         android:layout_marginBottom="-5dp"
         android:layout_height="wrap_content"
