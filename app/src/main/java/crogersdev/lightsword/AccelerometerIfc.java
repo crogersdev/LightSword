@@ -29,7 +29,6 @@ public class AccelerometerIfc implements SensorEventListener {
     EventCB m_callback;
 
     AccelerometerIfc(Context cxt, LightSwordState curState) {
-        Log.d("CROGERSDEV", "Inside getAccelerometer");
         m_swordState = curState;
 
         // setup accelerometer stuff
@@ -51,7 +50,6 @@ public class AccelerometerIfc implements SensorEventListener {
     }
 
     @Override
-    // todo: consider moving all accelerometer data to its own class
     public synchronized void onSensorChanged(SensorEvent ev) {
         if (ev.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             getAccelerometer(ev);
@@ -59,7 +57,7 @@ public class AccelerometerIfc implements SensorEventListener {
     }
 
     private void getAccelerometer(SensorEvent ev) {
-        Log.d("CROGERSDEV", "Inside getAccelerometer");
+        //Log.d("CROGERSDEV", "Inside getAccelerometer");
         float[] aValues = ev.values;
         float currentX = aValues[0];
         float currentY = aValues[1];

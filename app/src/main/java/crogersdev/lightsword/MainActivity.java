@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -101,8 +102,6 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
         m_swordState = new LightSwordState();
         m_swordState.m_isOn = false;
         // TODO: read from preferences here for defaults
-        m_swordState.m_bladeColor = LightSwordState.bladeColor_e.BLUE;
-        m_swordState.m_hilt = 2;
 
         m_swooshSound = false;
         m_clashSound = false;
@@ -165,9 +164,10 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
 
     @Override
     public void okClicked(int newHiltSelection, LightSwordState.bladeColor_e newBladeColor) {
-        //Integer hilt = newHiltSelection;
-        //Integer blade = newBladeColor.getValue();
-        //Toast.makeText(MainActivity.this, "hilt: " + hilt.toString() + " color: " + blade.toString(), Toast.LENGTH_SHORT).show();
+        Integer hilt = newHiltSelection;
+        Integer blade = newBladeColor.getValue();
+        Log.d("crogersdev", "back in main activity callback");
+        Log.d("crogersdev", "hilt: " + hilt.toString() + " color: " + blade.toString());
         m_swordState.m_bladeColor = newBladeColor;
         m_swordState.m_hilt = newHiltSelection;
         redrawSword();

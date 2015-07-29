@@ -10,7 +10,7 @@ public class LightSwordState {
     public boolean m_isOn;  // true for on, false for off
 
     public enum bladeColor_e {
-        RED(0), GREEN(1), BLUE(2), PURPLE(2);
+        RED(0), GREEN(1), BLUE(2), PURPLE(3);
         private int value;
         bladeColor_e(int value) {
             this.value = value;

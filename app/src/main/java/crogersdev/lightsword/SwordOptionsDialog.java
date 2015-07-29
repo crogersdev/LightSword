@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +35,11 @@ public class SwordOptionsDialog extends DialogFragment {
 
     public static SwordOptionsDialog newInstance(int curHilt,
                                                        LightSwordState.bladeColor_e curBladeColor) {
+        Log.d("crogersdev", "new dialog being created");
+        Integer h, b;
+        h = curHilt;
+        b = curBladeColor.getValue();
+        Log.d("crogersdev", "init'd with hilt " + h.toString() + " and blade " + b.toString());
         SwordOptionsDialog fragment = new SwordOptionsDialog();
         Bundle bundle = new Bundle(2);
         bundle.putInt(CUR_HILT, curHilt);
@@ -84,8 +88,16 @@ public class SwordOptionsDialog extends DialogFragment {
         m_listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("LOG_CROGERS", "onClick in swordOptionsDialog called");
+                //Log.d("LOG_CROGERS", "onClick in swordOptionsDialog called");
                 int btnId = v.getId();
+                Integer clicked = btnId;
+                Log.d("crogersdev", "button clicked: " + clicked.toString());
+                Integer h, b;
+                h = m_hilt;
+                b = m_bladeColor.getValue();
+                Log.d("crogersdev", "m_hilt before: " + h.toString() + ", blade before" +
+                        "" +
+                        ": " + b.toString());
                 switch (btnId) {
                     case R.id.hilt1Dialog:
                         m_hilt = 1;
@@ -125,6 +137,10 @@ public class SwordOptionsDialog extends DialogFragment {
                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                    @Override
                    public void onClick(DialogInterface dialogInterface, int i) {
+                       Integer h, b;
+                       h = m_hilt;
+                       b = m_bladeColor.getValue();
+                       Log.d("crogersdev", "hilt selected: " + h.toString() + ", blade selected: " + b.toString());
                        m_callback.okClicked(m_hilt, m_bladeColor);
                    }
                })
