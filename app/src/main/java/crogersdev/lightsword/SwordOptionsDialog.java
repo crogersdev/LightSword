@@ -26,36 +26,22 @@ public class SwordOptionsDialog extends DialogFragment {
     private ImageButton m_dlgColorRed;
     private ImageButton m_dlgColorPurple;
 
-    public static int m_hilt;
-    public static LightSwordState.bladeColor_e m_bladeColor;
+    int m_hilt;
+    int m_bladeColor;
 
     private static final String CUR_HILT = "current hilt";
     private static final String CUR_BLADECOLOR = "current blade color";
 
     public SwordOptionsDialog() {}
 
-    public static SwordOptionsDialog newInstance(int curHilt,
-                                                 LightSwordState.bladeColor_e curBladeColor) {
-        //m_hilt = curHilt;
-        //m_bladeColor = curBladeColor;
-
-        Integer h, c;
-        h = m_hilt;
-        c = curBladeColor.getValue();
-
-        Log.d(LOG_TAG, "newInstance: hilt: " + h.toString() + " color: " + c.toString());
-
+    public static SwordOptionsDialog newInstance() {
         SwordOptionsDialog fragment = new SwordOptionsDialog();
-        /*Bundle bundle = new Bundle(2);
-        bundle.putInt(CUR_HILT, curHilt);
-        bundle.putInt(CUR_BLADECOLOR, curBladeColor.getValue());
-        fragment.setArguments(bundle);*/
         return fragment;
     }
 
     public interface DlgIfc {
         // potential addition in the future - another ifc function for 'cancel'
-        void okClicked(int hilt, LightSwordState.bladeColor_e color);
+        void okClicked(int hilt, int color);
     }
 
     DlgIfc m_callback;
@@ -74,9 +60,8 @@ public class SwordOptionsDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        int m_hilt = getArguments().getInt("hilt");
-        int c = getArguments().getInt("color");
-        LightSwordState.bladeColor_e m_bladeColor = new LightSwordState.bladeColor_e(c);
+        m_hilt = getArguments().getInt("hilt");
+        m_bladeColor = getArguments().getInt("color");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -107,16 +92,16 @@ public class SwordOptionsDialog extends DialogFragment {
                         break;
 
                     case R.id.redBladeDialog:
-                        m_bladeColor = LightSwordState.bladeColor_e.RED;
+                        m_bladeColor = 0;
                         break;
                     case R.id.greenBladeDialog:
-                        m_bladeColor = LightSwordState.bladeColor_e.GREEN;
+                        m_bladeColor = 1;
                         break;
                     case R.id.blueBladeDialog:
-                        m_bladeColor = LightSwordState.bladeColor_e.BLUE;
+                        m_bladeColor = 2;
                         break;
                     case R.id.purpleBladeDialog:
-                        m_bladeColor = LightSwordState.bladeColor_e.PURPLE;
+                        m_bladeColor = 3;
                         break;
                 }
             }

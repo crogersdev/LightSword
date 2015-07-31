@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
                 case R.id.btn_blade:
                     Bundle bundle = new Bundle(2);
                     bundle.putInt("hilt", m_swordState.m_hilt);
-                    bundle.putInt("color", m_swordState.m_bladeColor.getValue());
+                    bundle.putInt("color", m_swordState.m_bladeColor);
                     customSwordDlg.setArguments(bundle);
                     customSwordDlg.show(getFragmentManager(), "Customize Light Sword");
                     break;
@@ -129,7 +129,7 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
         m_animSwordOn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sword_on_anim);
 
         // Customize LightSword
-        customSwordDlg = SwordOptionsDialog.newInstance(m_swordState.m_hilt, m_swordState.m_bladeColor);
+        customSwordDlg = SwordOptionsDialog.newInstance();
     }
 
     @Override
@@ -169,7 +169,7 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
     }
 
     @Override
-    public void okClicked(int newHiltSelection, LightSwordState.bladeColor_e newBladeColor) {
+    public void okClicked(int newHiltSelection, int newBladeColor) {
         m_swordState.m_bladeColor = newBladeColor;
         m_swordState.m_hilt = newHiltSelection;
         redrawSword();
@@ -210,16 +210,16 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
         }
 
         switch (m_swordState.m_bladeColor) {
-            case RED:
+            case 0:
                 m_bladeBtn.setImageResource(R.drawable.red_blade_med);
                 break;
-            case GREEN:
+            case 1:
                 m_bladeBtn.setImageResource(R.drawable.green_blade_med);
                 break;
-            case BLUE:
+            case 2:
                 m_bladeBtn.setImageResource(R.drawable.blue_blade_med);
                 break;
-            case PURPLE:
+            case 3:
                 m_bladeBtn.setImageResource(R.drawable.purple_blade_med);
                 break;
         }
