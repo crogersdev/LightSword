@@ -71,6 +71,10 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
                     toggleSword();
                     break;
                 case R.id.btn_blade:
+                    Bundle bundle = new Bundle(2);
+                    bundle.putInt("hilt", m_swordState.m_hilt);
+                    bundle.putInt("color", m_swordState.m_bladeColor.getValue());
+                    customSwordDlg.setArguments(bundle);
                     customSwordDlg.show(getFragmentManager(), "Customize Light Sword");
                     break;
             } // end switch
