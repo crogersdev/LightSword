@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -255,6 +256,20 @@ public class MainActivity extends FragmentActivity implements AccelerometerIfc.E
     protected void onPause() {
         // todo: on screen lock stop the sound pool
         super.onPause();
+
+        super.onPause();
+
+        // If the screen is off then the device has been locked
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        boolean isScreenOn = powerManager.isScreenOn();
+
+
+        if (!isScreenOn) {
+
+            // The screen has been locked
+            // do stuff...
+        }
+
         m_accelIfc.unregisterListener();
         m_soundPool.stop(m_humId);
     }
